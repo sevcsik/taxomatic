@@ -32,5 +32,6 @@ askList invoiceType = do
 		else return []
 
 formatList :: [Float] -> String
+formatList [] = "<nothing>"
 formatList (x:[]) = show x
 formatList (x:xs) = (show x) ++ ", " ++ (formatList xs)

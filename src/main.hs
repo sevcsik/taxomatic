@@ -5,4 +5,4 @@ main = do
 	incomes <- askList Income
 	putStrLn $ "Entered incomes: " ++ (formatList incomes)
 	expenses <- askList Expense
-	putStrLn $ "Entered expenses " ++ (formatList expenses)
+	putStrLn $ "Entered expenses: " ++ (formatList expenses)
