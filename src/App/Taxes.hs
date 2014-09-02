@@ -1,6 +1,6 @@
-module App.Taxes (
-	  calculateTaxes
-	, calculateTotalTaxes
+module App.Taxes 
+( calculateTotalTaxes
+, formatTaxes
 ) where
 
 rates = 
@@ -23,3 +23,12 @@ calculateTaxes True base = map (applyRate base) (rates ++ fullTimeRates)
 calculateTotalTaxes :: Bool -> Float -> Float
 calculateTotalTaxes fullTime base = 
 	(sum . map (snd)) (calculateTaxes fullTime base)
+
+formatTaxLine :: (String, Float) -> String
+formatTaxLine (label, value) = label ++ ": " ++ (show value) ++ "\n"
+
+formatTaxes :: Bool -> Float -> String
+formatTaxes fullTime base = 
+	foldl1 (++) (map (formatTaxLine)
+		((calculateTaxes fullTime base) 
+			++ [("TOTAL TAX", calculateTotalTaxes fullTime base)]))
