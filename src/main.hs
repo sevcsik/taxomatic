@@ -1,4 +1,5 @@
 import App.Input 
+import App.Taxes
 
 main = do
 	putStrLn "Type in incomes"
@@ -9,4 +10,5 @@ main = do
 	putStrLn $ "Total income: " ++ (show (sum incomes))
 	putStrLn $ "Total expense: " ++ (show (sum expenses))
 	putStrLn $ "Profit: " ++ (show (sum incomes - sum expenses))
-	
+	print $ calculateTaxes False (sum incomes - sum expenses)
+
