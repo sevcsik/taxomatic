@@ -1,5 +1,6 @@
 module App.Taxes (
-	calculateTaxes
+	  calculateTaxes
+	, calculateTotalTaxes
 ) where
 
 rates = 
@@ -19,4 +20,6 @@ calculateTaxes :: Bool -> Float -> [(String, Float)]
 calculateTaxes False base = map (applyRate base) rates 
 calculateTaxes True base = map (applyRate base) (rates ++ fullTimeRates) 
 
-
+calculateTotalTaxes :: Bool -> Float -> Float
+calculateTotalTaxes fullTime base = 
+	(sum . map (snd)) (calculateTaxes fullTime base)
