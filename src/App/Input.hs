@@ -1,8 +1,8 @@
 module App.Input (
-	askList,
-	formatList,
-	InvoiceType(Income, Expense)
+	interactiveSession
 ) where
+
+import App.Taxes
 
 import Control.Monad
 import Control.Applicative
@@ -35,3 +35,18 @@ formatList :: [Float] -> String
 formatList [] = "<nothing>"
 formatList (x:[]) = show x
 formatList (x:xs) = (show x) ++ ", " ++ (formatList xs)
+
+interactiveSession :: IO ()
+interactiveSession = do
+	putStrLn "Welcome to Tax-O-Matic\n"
+	incomes <- askList Income
+	expenses <- askList Expense
+	let base = (sum incomes - sum expenses)
+	putStrLn $ "List of incomes: " ++ (formatList incomes)
+	putStrLn $ "List of expenses: " ++ (formatList expenses)
+	putStrLn $ "Total income: " ++ (show (sum incomes))
+	putStrLn $ "Total expense: " ++ (show (sum expenses))
+	putStrLn $ "Profit: " ++ (show base)
+	putStr $ "=== Tax Summary === \n" 
+		++ (formatTaxes False (base))
+	putStrLn $ "Net Profit: " ++ (show (base - (calculateTotalTaxes False base)))
