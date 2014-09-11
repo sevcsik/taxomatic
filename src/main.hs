@@ -28,7 +28,7 @@ options = [
 	, Option "v" ["verbose"]
 		(NoArg 
 			(\opt -> opt { isVerbose = True }))
-		"Print every garbage into stdout"
+		"Print every garbage to stdout"
 	, Option "h" ["help"]
 		(NoArg 
 			(\opt -> opt { isHelp = True }))
