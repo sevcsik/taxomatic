@@ -1,21 +1,15 @@
 import App.Input 
 import App.Taxes
+import App.FreshBooks
+import App.Config
 
 import System.Console.GetOpt
 import System.Environment
 import System.Exit
+import Data.Maybe
 
-data Options = Options {
-	  isVerbose :: Bool
-	, isInteractive :: Bool
-	, isHelp :: Bool
-	, getFreshBooksDomain :: Maybe String
-	, getFreshBooksToken :: Maybe String
-	} 
-	deriving Show
-
-defaults :: Options
-defaults = Options {
+defaults :: Config
+defaults = Config {
 	  isVerbose = False
 	, isInteractive = False
 	, isHelp = False
@@ -23,7 +17,7 @@ defaults = Options {
 	, getFreshBooksToken = Nothing
 	}
 
-options :: [ OptDescr (Options -> Options) ]
+options :: [ OptDescr (Config -> Config) ]
 options = [
 	  Option "i" ["interactive"] 
 		(NoArg 
@@ -57,14 +51,17 @@ printHelp = do
 
 main = do
 	args <- getArgs
-	let (actions, nonOptions, errors) = getOpt RequireOrder options args
+	let (actions, nonConfig, errors) = getOpt RequireOrder options args
 	let config = foldl (\v f -> f v) defaults actions
 	if isHelp config
 		then do
 			printHelp
 			exitWith ExitSuccess
 		else if isInteractive config
-			then interactiveSession
+			then do interactiveSession
+		else if isJust (getFreshBooksDomain config) && 
+			isJust (getFreshBooksToken config)
+			then do freshBooksSession config
 		else do
 			printHelp
 			exitWith (ExitFailure 1)
