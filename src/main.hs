@@ -9,6 +9,8 @@ data Options = Options {
 	  isVerbose :: Bool
 	, isInteractive :: Bool
 	, isHelp :: Bool
+	, getFreshBooksDomain :: Maybe String
+	, getFreshBooksToken :: Maybe String
 	} 
 	deriving Show
 
@@ -17,6 +19,8 @@ defaults = Options {
 	  isVerbose = False
 	, isInteractive = False
 	, isHelp = False
+	, getFreshBooksDomain = Nothing
+	, getFreshBooksToken = Nothing
 	}
 
 options :: [ OptDescr (Options -> Options) ]
@@ -29,6 +33,17 @@ options = [
 		(NoArg 
 			(\opt -> opt { isVerbose = True }))
 		"Print every garbage to stdout"
+	, Option "f" ["freshbooks-domain"]
+		(ReqArg
+			(\arg opt -> opt { getFreshBooksDomain = Just arg }) 
+			"FBDOMAIN")
+		"Download invoices from a given FreshBooks site"
+	, Option "t" ["freshbooks-token"]
+		(ReqArg
+			(\arg opt -> opt { getFreshBooksToken = Just arg }) 
+			"FBTOKEN")
+		("Security token for the FreshBooks API - can be obtained at " ++
+		"https://<your-site>.freshbooks.com/apiEnable")
 	, Option "h" ["help"]
 		(NoArg 
 			(\opt -> opt { isHelp = True }))
