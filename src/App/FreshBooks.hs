@@ -18,7 +18,8 @@ freshBooksSession config = do
 	let domain = fromJust (getFreshBooksDomain config)
 	let token = fromJust (getFreshBooksToken config)
 	when v $ putStrLn ("FreshBooks session: " ++ token ++ "@" ++ domain)
-	requestAPI (buildURL domain token) config >>= putStrLn
+	response <- requestAPI (buildURL domain token) config
+	when v $ putStrLn("Server response: " ++ response)
 
 buildURL :: String -> String -> String
 buildURL domain token = 
@@ -29,7 +30,7 @@ buildRequest req = req {
 	  method = renderStdMethod POST
 	, secure = True
 	, requestBody = RequestBodyBS (BS.fromString requestXML)
-}
+	}
 
 requestXML :: String
 requestXML = "invalid xml"
